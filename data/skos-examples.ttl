@@ -1,0 +1,108 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> . 
+@prefix dcterms: <http://purl.org/dc/terms#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix : <http://data#> .
+
+
+:SubSubConcept 
+    rdfs:subClassOf :SubConcept .
+:SubConcept 
+    rdfs:subClassOf skos:Concept .
+:SubSubConceptScheme 
+    rdfs:subClassOf :SubConceptScheme .
+:SubConceptScheme 
+    rdfs:subClassOf skos:ConceptScheme .
+
+	
+# Labeling and Documentation Issues - Ambiguous Notation References
+# -----
+
+
+# invalid data
+# -----
+:ambiguous-notation-references-c1
+    a :SubSubConcept ;
+    skos:inScheme :ambiguous-notation-references-cs1 ;
+    skos:definition "definition 1"@en , "definition 1"@de , "definition 1"@fr ;
+    skos:notation "notation"@en .
+:ambiguous-notation-references-c2
+    a :SubSubConcept ;
+    skos:inScheme :ambiguous-notation-references-cs1 ;
+    skos:definition "definition 2"@en , "definition 2"@de , "definition 2"@fr ;
+    skos:notation "notation"@en .
+:ambiguous-notation-references-cs1
+    a :SubSubConceptScheme ;
+    skos:definition "definition"@en , "definition"@de , "definition"@fr .
+
+# valid data
+# -----
+:ambiguous-notation-references-c3
+    a :SubSubConcept ;
+    skos:inScheme :ambiguous-notation-references-cs2 ;
+    skos:definition "definition 3"@en , "definition 3"@de , "definition 3"@fr ;
+    skos:notation "notation-3"@en .
+:ambiguous-notation-references-c4
+    a :SubSubConcept ;
+    skos:inScheme :ambiguous-notation-references-cs2 ;
+    skos:definition "definition 4"@en , "definition 4"@de , "definition 4"@fr ;
+    skos:notation "notation-4"@en .
+:ambiguous-notation-references-cs2
+    a :SubSubConceptScheme ;
+    skos:definition "definition"@en , "definition"@de , "definition"@fr .
+	
+	
+# Structural Issues - Orphan Concepts
+# -----
+
+
+# invalid data
+# -----
+:orphan-concepts-c1
+    a :SubSubConcept .
+	
+# valid data
+# -----
+:orphan-concepts-c2
+    a :SubSubConcept ;
+    skos:related :orphan-concepts-c3 .	
+	
+
+# Structural Issues - Cyclic Hierarchical Relations
+# -----
+
+
+# invalid data
+# -----
+:cyclic-hierarchical-relations-c1
+    a :SubSubConcept ;
+    skos:definition "definition"@en , "definition"@de, "definition"@fr ;
+    skos:broader :cyclic-hierarchical-relations-c2 .
+:cyclic-hierarchical-relations-c2
+    a :SubSubConcept ;
+    skos:definition "definition"@en , "definition"@de, "definition"@fr ;
+    skos:broader :cyclic-hierarchical-relations-c3 .
+:cyclic-hierarchical-relations-c3
+    a :SubSubConcept ;
+    skos:definition "definition"@en , "definition"@de, "definition"@fr ;
+    skos:broader :cyclic-hierarchical-relations-c1 .
+
+# valid data
+# -----
+:cyclic-hierarchical-relations-c4
+    a :SubSubConcept ;
+    skos:definition "definition"@en , "definition"@de, "definition"@fr ;
+    skos:broader :cyclic-hierarchical-relations-c5 .
+:cyclic-hierarchical-relations-c5
+    a :SubSubConcept ;
+    skos:definition "definition"@en , "definition"@de, "definition"@fr ;
+    skos:broader :cyclic-hierarchical-relations-c6 .
+:cyclic-hierarchical-relations-c6
+    a :SubSubConcept ;
+    skos:definition "definition"@en , "definition"@de, "definition"@fr ;
+    skos:broader :cyclic-hierarchical-relations-c7 .
+:cyclic-hierarchical-relations-c7
+    a :SubSubConcept ;
+    skos:definition "definition"@en , "definition"@de, "definition"@fr .   
