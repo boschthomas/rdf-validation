@@ -555,3 +555,114 @@ WHERE {
 		AS ?violationMessage ) .
 	BIND ( ( 'INFO' ) AS ?severityLevel ) .
 }
+
+
+# Structural Issues - Valueless Associative Relations
+# -----
+
+PREFIX rdf:	 <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX :     <http://data#>
+SELECT ?subject ?violationMessage ?severityLevel
+WHERE {	
+	# data
+	# ---- 
+	?subject
+		a [rdfs:subClassOf* skos:Concept] ;
+		skos:related ?sibling ;
+		skos:broader ?TopConcept .
+	?sibling 
+		a [rdfs:subClassOf* skos:Concept] ; 
+		skos:related ?subject ;
+		skos:broader ?TopConcept .                    
+	FILTER ( ?subject != ?sibling ) .
+	?TopConcept 
+		a [rdfs:subClassOf* skos:Concept] .	 
+
+	# violation message
+	# -----
+	BIND ( CONCAT( 
+		"The concepts '", 
+		xsd:string( ?subject ), 
+		"' and '", 
+		xsd:string( ?sibling ),
+		"' are siblings (having the same broader concepts), but are also connected by a not necessary associative relation (skos:related).") 
+		AS ?violationMessage ) . 
+	BIND ( ( 'INFO' ) AS ?severityLevel ) .
+}
+
+PREFIX rdf:	 <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX :     <http://data#>
+SELECT ?subject ?violationMessage ?severityLevel
+WHERE {	
+	# data
+	# ---- 
+	?subject
+		a [rdfs:subClassOf* skos:Concept] ;
+		skos:related ?sibling ;
+		skos:narrower ?BottomConcept .
+	?sibling 
+		a [rdfs:subClassOf* skos:Concept] ; 
+		skos:related ?subject ;
+		skos:narrower ?BottomConcept .
+	FILTER ( ?subject != ?sibling ) .
+	?BottomConcept 
+		a [rdfs:subClassOf* skos:Concept] .		 
+
+	# violation message
+	# -----
+	BIND ( CONCAT( 
+		"The concepts '", 
+		xsd:string( ?subject ), 
+		"' and '", 
+		xsd:string( ?sibling ),
+		"' are siblings (having the same narrower concepts), but are also connected by a not necessary associative relation (skos:related).") 
+		AS ?violationMessage ) . 
+	BIND ( ( 'INFO' ) AS ?severityLevel ) .
+}
+
+# Structural Issues - Solely Transitively Related Concepts
+# -----
+
+PREFIX rdf:	 <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX :     <http://data#>
+SELECT ?subject ?violationMessage ?severityLevel
+WHERE {	
+	# data
+	# ----
+	?subject 
+		a [rdfs:subClassOf* skos:Concept] ;
+		skos:narrowerTransitive ?object .
+	?object
+		a [rdfs:subClassOf* skos:Concept] ;
+		skos:broaderTransitive ?subject .
+	FILTER ( ?subject != ?object ) .
+		
+	# validation
+	# ----------
+	FILTER NOT EXISTS {
+		?subject ?narrower ?object .
+		FILTER ( ?narrower IN (
+		skos:narrower,
+		skos:narrowMatch ) ) .	 
+		
+		?object ?broader ?subject .
+		FILTER ( ?broader IN ( 
+		skos:broader,
+		skos:broadMatch ) ) .	
+	}
+
+	# violation message
+	# -----
+	BIND ( CONCAT( 
+		"The concept '", 
+		xsd:string( ?subject ),
+		"' is only related to the concept '", 
+		xsd:string( ?object ), 
+		"' by the transitive properties skos:narrowerTransitive and skos:broaderTransitive",
+		", but not by skos:broader and skos:narrower sub-properties. | skos:broaderTransitive and skos:narrowerTransitive are not used to make assertions, so they should not be the only relations hierarchically relating two concepts. ")
+		AS ?violationMessage ) . 
+	BIND ( ( 'INFO' ) AS ?severityLevel ) .
+}

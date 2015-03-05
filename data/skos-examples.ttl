@@ -106,3 +106,92 @@
 :cyclic-hierarchical-relations-c7
     a :SubSubConcept ;
     skos:definition "definition"@en , "definition"@de, "definition"@fr .   
+	
+	
+# Structural Issues - Valueless Associative Relations
+# -----
+
+:SubSubConcept 
+    rdfs:subClassOf :SubConcept .
+:SubConcept 
+    rdfs:subClassOf skos:Concept .
+
+:TopConcept
+    a :SubSubConcept ;
+    skos:definition ""@en . 
+:BottomConcept
+    a :SubSubConcept ;
+    skos:definition ""@en . 
+:TopConcept2
+    a :SubSubConcept ;
+    skos:definition ""@en . 
+:BottomConcept2
+    a :SubSubConcept ;
+    skos:definition ""@en . 
+
+# valid data
+# -----
+:valueless-associative-relations-sibling1
+    a :SubSubConcept ;
+    skos:definition ""@en ;
+    skos:related :valueless-associative-relations-sibling2 ;
+    skos:broader :TopConcept ;
+    skos:narrower :BottomConcept .
+:valueless-associative-relations-sibling2
+    a :SubSubConcept ;
+    skos:definition ""@en ;
+    skos:related :valueless-associative-relations-sibling1 ;
+    skos:broader :TopConcept2 ;
+    skos:narrower :BottomConcept2 .    
+    
+# invalid data
+# -----
+:valueless-associative-relations-sibling3
+    a :SubSubConcept ;
+    skos:related :valueless-associative-relations-sibling4 ;
+    skos:definition ""@en ;
+    skos:broader :TopConcept .
+:valueless-associative-relations-sibling4
+    a :SubSubConcept ;
+    skos:related :valueless-associative-relations-sibling3 ;
+    skos:definition ""@en ;
+    skos:broader :TopConcept .
+:valueless-associative-relations-sibling5
+    a :SubSubConcept ;
+    skos:related :valueless-associative-relations-sibling6 ;
+    skos:definition ""@en ;
+    skos:narrower :BottomConcept .
+:valueless-associative-relations-sibling6
+    a :SubSubConcept ;
+    skos:related :valueless-associative-relations-sibling5 ;
+    skos:definition ""@en ;
+    skos:narrower :BottomConcept .
+	
+
+# Structural Issues - Solely Transitively Related Concepts
+# -----
+
+:SubSubConcept 
+    rdfs:subClassOf :SubConcept .
+:SubConcept 
+    rdfs:subClassOf skos:Concept .
+
+# invalid data
+# -----
+:solely-transitively-related-concepts-c1
+    a :SubSubConcept ;
+    skos:narrowerTransitive :solely-transitively-related-concepts-c2 .
+:solely-transitively-related-concepts-c2
+    a :SubSubConcept ;
+    skos:broaderTransitive :solely-transitively-related-concepts-c1 .	
+    	
+# valid data
+# -----
+:solely-transitively-related-concepts-c3
+    a :SubSubConcept ;
+    skos:narrowerTransitive :solely-transitively-related-concepts-c4 ;
+    skos:narrower :solely-transitively-related-concepts-c4 .
+:solely-transitively-related-concepts-c4
+    a :SubSubConcept ;
+    skos:broaderTransitive :solely-transitively-related-concepts-c3 ;
+    skos:broader :solely-transitively-related-concepts-c3 .
