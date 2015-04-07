@@ -468,6 +468,9 @@ WHERE {
 
 # Labeling and Documentation Issues - Ambiguous Notation References
 # -----
+# Concepts within the same concept scheme should not
+# have identical skos:notation literals.
+
 PREFIX rdf:	 <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX :     <http://data#>
