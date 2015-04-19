@@ -1,25 +1,26 @@
 ﻿# namespace declarations
 # ------
-@prefix fn:        <http://www.w3.org/2005/xpath-functions#> .
-@prefix sparql:    <http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#> .
-@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
-@prefix dcterms:   <http://purl.org/dc/terms#> .
-@prefix rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:      <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl:       <http://www.w3.org/2002/07/owl#> .
-@prefix sp:        <http://spinrdf.org/sp#> .
-@prefix spin:      <http://spinrdf.org/spin#> .
-@prefix smf:       <http://topbraid.org/sparqlmotionfunctions#> .
-@prefix spif:      <http://spinrdf.org/spif#> . 
-@prefix spl:       <http://spinrdf.org/spl#> .
-@prefix spinowl:   <http://topbraid.org/spin/spinowl> .
-@prefix spinx:     <http://spinrdf.org/spinx#> . 
-@prefix functions: <http://www.example.org/functions#> .
-@prefix templates: <http://www.example.org/templates#> .
-@prefix sparql:    <http://www.w3.org/TR/sparql11-query/#> .
-@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix fn:          <http://www.w3.org/2005/xpath-functions#> .
+@prefix sparql:      <http://www.w3.org/TR/2013/REC-sparql11-query-20130321/#> .
+@prefix xsd:         <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms:     <http://purl.org/dc/terms#> .
+@prefix rdf:         <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:        <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:         <http://www.w3.org/2002/07/owl#> .
+@prefix sp:          <http://spinrdf.org/sp#> .
+@prefix spin:        <http://spinrdf.org/spin#> .
+@prefix smf:         <http://topbraid.org/sparqlmotionfunctions#> .
+@prefix spif:        <http://spinrdf.org/spif#> . 
+@prefix spl:         <http://spinrdf.org/spl#> .
+@prefix spinowl:     <http://topbraid.org/spin/spinowl> .
+@prefix spinx:       <http://spinrdf.org/spinx#> . 
+@prefix functions:   <http://www.example.org/functions#> .
+@prefix templates:   <http://www.example.org/templates#> .
+@prefix sparql:      <http://www.w3.org/TR/sparql11-query/#> .
+@prefix skos:        <http://www.w3.org/2004/02/skos/core#> .
 @prefix skosqc2spin: <http://constraints.org/skosqc2spin#> .
-@prefix skosqc: <http://www.example.org/skosqc#> .
+@prefix skosqc:      <http://www.example.org/skosqc#> .
+
 
 # class constraints
 # -----------------
@@ -34,7 +35,7 @@ owl:Thing
 		[   a skosqc2spin:LabelingAndDocumentationIssues-EmptyLabels ] ,
 		[   a skosqc2spin:LabelingAndDocumentationIssues-AmbiguousNotationReferences ] ,
 		[   a skosqc2spin:StructuralIssues-OrphanConcepts ] ,
-#		[   a skosqc2spin:StructuralIssues-DisconnectedConceptClusters ] ,
+		[   a skosqc2spin:StructuralIssues-DisconnectedConceptClusters ] ,
         [   a skosqc2spin:StructuralIssues-CyclicHierarchicalRelations ] ,
         [   a skosqc2spin:StructuralIssues-ValuelessAssociativeRelations ] ,
 		[   a skosqc2spin:StructuralIssues-SolelyTransitivelyRelatedConcepts ] ,

@@ -22,11 +22,13 @@
 # -----------------
 owl:Thing 
 	spin:constraint 
-		[   a tdv:vocabulary ] .
+		[   a tdv:vocabulary ] ,
+		[   a tdv:property-domains ] ,
+		[   a tdv:property-ranges ] .
 
 
 # Vocabulary
-# -----
+# ----------
 tdv:vocabulary
 	a spin:ConstructTemplate ;
     rdfs:subClassOf spin:ConstructTemplates ;
@@ -59,9 +61,17 @@ tdv:vocabulary
 					FILTER( ! REGEX( STR( ?p ), "^http://www.w3.org/2002/07/owl#" ) ) .
 					FILTER( ! REGEX( STR( ?p ), "^http://spinrdf.org/spinx#" ) ) .
 					FILTER( ! REGEX( STR( ?p ), "^http://purl.org/dc/terms/" ) ) .
-					FILTER( ! REGEX( STR( ?p ), "^http://www.w3.org/1999/xhtmlhead" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://www.w3.org/1999/xhtml" ) ) .
 					FILTER( ! REGEX( STR( ?p ), "^http://purl.org/dc/elements/1.1/" ) ) .
 					FILTER( ! REGEX( STR( ?p ), "^http://www.w3.org/2004/02/skos/core#definition" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://rdfs.org/ns/void#" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://www.w3.org/2005/xpath-functions#" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://topbraid.org/sparqlmotionfunctions#" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://jena.hpl.hp.com/ARQ/function#" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://tdv#" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://purl.org/linked-data/cube/qb2spin#" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://www.w3.org/2001/XMLSchema#" ) ) .
+					FILTER( ! REGEX( STR( ?p ), "^http://xmlns.com/foaf/0.1" ) ) .
 				
 					?subject ?p ?o .
 					FILTER NOT EXISTS {
@@ -86,9 +96,17 @@ tdv:vocabulary
 					FILTER( ! REGEX( STR( ?c ), "^http://www.w3.org/2002/07/owl#" ) ) .
 					FILTER( ! REGEX( STR( ?c ), "^http://spinrdf.org/spinx#" ) ) .
 					FILTER( ! REGEX( STR( ?c ), "^http://purl.org/dc/terms/" ) ) .
-					FILTER( ! REGEX( STR( ?c ), "^http://www.w3.org/1999/xhtmlhead" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://www.w3.org/1999/xhtml" ) ) .
 					FILTER( ! REGEX( STR( ?c ), "^http://purl.org/dc/elements/1.1/" ) ) .
 					FILTER( ! REGEX( STR( ?c ), "^http://www.w3.org/2004/02/skos/core#definition" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://rdfs.org/ns/void#" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://www.w3.org/2005/xpath-functions#" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://topbraid.org/sparqlmotionfunctions#" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://jena.hpl.hp.com/ARQ/function#" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://tdv#" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://purl.org/linked-data/cube/qb2spin#" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://www.w3.org/2001/XMLSchema#" ) ) .
+					FILTER( ! REGEX( STR( ?c ), "^http://xmlns.com/foaf/0.1" ) ) .
 	        	
 					?subject a ?c .
 					FILTER NOT EXISTS {
@@ -103,6 +121,165 @@ tdv:vocabulary
 	                    \"' is not defined within a vocabulary.\" ) 
 	                    AS ?violationMessage ) . 
 	        	}
+            }
+            """ ;
+    ] .
+    
+# Property Domains
+# ----------------
+tdv:property-domains
+	a spin:ConstructTemplate ;
+    rdfs:subClassOf spin:ConstructTemplates ;
+    # spin:violationSource
+    spin:labelTemplate "Property Domains|||||ERROR" ; 
+    spin:body [
+        rdf:type sp:Construct ;
+        sp:text """
+            PREFIX tdv: <http://tdv#>
+            CONSTRUCT {
+                _:cv 
+                	a spin:ConstraintViolation ;
+                    spin:violationRoot ?subject ;
+                    rdfs:label ?violationMessage ;
+                    spin:violationPath ?p .
+            }
+            WHERE {	 
+                { 
+				    # constraint
+					# ----------
+					?p
+					    a owl:ObjectProperty ;
+	    				rdfs:domain ?domain .
+							
+					# data
+					# ----
+					?subject ?p ?o .
+					
+					# validation
+					# ----------
+					FILTER NOT EXISTS { ?subject a ?domain } .
+	
+	                # violation message
+	                # -----------------
+	                BIND ( CONCAT( 
+	                    \"Property Domains | The individual '\", 
+	                    xsd:string( ?subject ), 
+	                    \"' has a '\", 
+	                    xsd:string( ?p ), 
+	                    \"' relationship, but is not assigned to the domain class '\", 
+	                    xsd:string( ?domain ))
+	                    AS ?violationMessage ) .
+                } 
+                UNION
+                {
+                	# constraint
+					# ----------
+					?p
+					    a owl:DatatypeProperty ;
+	    				rdfs:domain ?domain .
+							
+					# data
+					# ----
+					?subject ?p ?o .
+					
+					# validation
+					# ----------
+					FILTER NOT EXISTS { ?subject a ?domain } .
+	
+	                # violation message
+	                # -----------------
+	                BIND ( CONCAT( 
+	                    \"Property Domains | The individual '\", 
+	                    xsd:string( ?subject ), 
+	                    \"' has a '\", 
+	                    xsd:string( ?p ), 
+	                    \"' relationship, but is not assigned to the domain class '\", 
+	                    xsd:string( ?domain ))
+	                    AS ?violationMessage ) .
+                }
+            }
+            """ ;
+    ] .
+    
+# Property Ranges
+# ---------------
+tdv:property-ranges
+	a spin:ConstructTemplate ;
+    rdfs:subClassOf spin:ConstructTemplates ;
+    # spin:violationSource
+    spin:labelTemplate "Property Ranges|||||ERROR" ; 
+    spin:body [
+        rdf:type sp:Construct ;
+        sp:text """
+            PREFIX tdv: <http://tdv#>
+            CONSTRUCT {
+                _:cv 
+                	a spin:ConstraintViolation ;
+                    spin:violationRoot ?subject ;
+                    rdfs:label ?violationMessage ;
+                    spin:violationPath ?p .
+            }
+            WHERE {	  
+                {
+				    # constraint
+					# ----------
+					?p
+					    a rdf:Property , owl:ObjectProperty ;
+	    				rdfs:range ?range .
+							
+					# data
+					# ----
+					?subject ?p ?o .
+					
+					# validation
+					# ----------
+					FILTER NOT EXISTS { ?o a ?range } .
+	
+	                # violation message
+	                # -----------------
+	                BIND ( CONCAT( 
+	                    \"Property Ranges | The individual '\", 
+	                    xsd:string( ?subject ), 
+	                    \"' has a '\", 
+	                    xsd:string( ?p ), 
+	                    \"' relationship to the object '\", 
+	                    xsd:string( ?o ), 
+	                    \"', which is not assigned to the range class '\", 
+	                    xsd:string( ?range ))
+	                    AS ?violationMessage ) . 
+                }
+                UNION
+                {
+                	# constraint
+					# ----------
+					?property
+					    a rdf:Property , owl:DatatypeProperty ;
+	    				rdfs:range ?dt .
+							
+					# data
+					# ----
+					?subject ?property ?literal .
+					
+					# validation
+					# ----------
+					BIND ( ( DATATYPE ( ?literal ) ) AS ?datatype ) . 
+					FILTER ( ?datatype != ?dt ) .
+	
+	                # violation message
+	                # -----------------
+	                BIND ( CONCAT( 
+	                    \"Property Ranges | The individual '\", 
+	                    xsd:string( ?subject ), 
+	                    \"' has a '\", 
+	                    xsd:string( ?property ), 
+	                    \"' relationship to the literal '\", 
+	                    xsd:string( ?literal ), 
+	                    \"', which is of the datatype '\", 
+	                    xsd:string( ?datatype ),
+	                    \"', but not of the range datatype '\", 
+	                    xsd:string( ?dt ))
+	                    AS ?violationMessage ) . 
+                }
             }
             """ ;
     ] .
